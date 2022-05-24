@@ -1,4 +1,5 @@
 export interface routeType {
     path: string,
-    method: Function
+    method: Function,
+    args?: any
 }
