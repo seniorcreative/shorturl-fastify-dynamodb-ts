@@ -6,7 +6,7 @@ const server = fastify();
 
 routes.forEach((route: routeType) => {
   server.get(route.path, async (request, reply) => {
-    return route.method();
+    return route.method(route.args||null);
   })
 })
 
