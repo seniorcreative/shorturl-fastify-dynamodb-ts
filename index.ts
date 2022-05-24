@@ -1,11 +1,11 @@
 import fastify from 'fastify'
-import './adapter/datarepository';
+import { getItems } from './adapter/datarepository';
 
 const server = fastify()
 
-/* Example route */
-server.get('/items', async (request, reply) => {
-  return 'pong\n'
+/* List all items route */
+server.get('/list', async (request, reply) => {
+   return getItems()
 })
 
 server.listen(8080, (err, address) => {
