@@ -1,11 +1,13 @@
-import fastify from 'fastify'
-import { getItems } from './adapter/datarepository';
+import fastify from "fastify";
+import routes from "./controller/routes";
+import { routeType } from "./model/route";
 
-const server = fastify()
+const server = fastify();
 
-/* List all items route */
-server.get('/list', async (request, reply) => {
-   return getItems()
+routes.forEach((route: routeType) => {
+  server.get(route.path, async (request, reply) => {
+    return route.method();
+  })
 })
 
 server.listen(8080, (err, address) => {
