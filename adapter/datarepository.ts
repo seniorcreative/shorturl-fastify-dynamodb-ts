@@ -1,9 +1,9 @@
 import { DynamoDBClient, BatchGetItemCommand, BatchGetItemCommandInput } from "@aws-sdk/client-dynamodb";
 import "dotenv/config";
-import { fromEnv } from "@aws-sdk/credential-providers"; // ES6 import
-import { recordType, records} from "../model/shorturl"
+import { fromEnv } from "@aws-sdk/credential-providers";
+import { records } from "../model/shorturl"
 
-(async () => {
+export async function getItems() {
   const client = new DynamoDBClient({ region: "us-west-1", credentials: fromEnv() });
   const commandInput: BatchGetItemCommandInput = {
     "RequestItems": {
@@ -24,8 +24,9 @@ import { recordType, records} from "../model/shorturl"
   try {
     const results = await client.send(command);
     const records: records|undefined = results.Responses;
-    console.log("Got your list of shorturls:\r\n", records?.shorturl);
+    return records?.shorturl;
   } catch (err) {
     console.error(err);
+    return err;
   }
-})();
+}
