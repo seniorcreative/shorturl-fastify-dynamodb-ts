@@ -1,12 +1,20 @@
 import fastify from "fastify";
 import routes from "./controller/routes";
 import { routeType } from "./model/route";
+import { getItem } from "./adapter/datarepository";
+
 
 const server = fastify();
 
+// The main shorturl route
+server.get("/:shorturl", { schema: { params: { shorturl: { type: "string" } } } }, async (request, reply) => {
+  return getItem(Object(request.params).shorturl.toString())
+});
+
+// Other routes
 routes.forEach((route: routeType) => {
   server.get(route.path, async (request, reply) => {
-    return route.method(route.args||null);
+    return route.method(route.args || null);
   })
 })
 

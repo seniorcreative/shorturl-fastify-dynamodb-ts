@@ -1,4 +1,4 @@
-import { DynamoDBClient, BatchGetItemCommand, BatchGetItemCommandInput, PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, BatchGetItemCommand, BatchGetItemCommandInput, PutItemCommand, PutItemCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/client-dynamodb";
 import "dotenv/config";
 import { fromEnv } from "@aws-sdk/credential-providers";
 import { records, recordType } from "../model/shorturl";
@@ -26,6 +26,27 @@ export async function getItems() {
     const results = await client.send(command);
     const records: records|undefined = results.Responses;
     return records?.shorturl;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
+export async function getItem(short_url: any) {
+//   console.log("get Item args",  short_url);
+  const client = new DynamoDBClient({ region: "us-west-1", credentials: fromEnv() });
+  const commandInput: ScanCommandInput = {
+	  "TableName": "shorturl",
+	  "FilterExpression": "short_url = :short_url",
+		ExpressionAttributeValues: {
+			":short_url": {S: short_url},
+		},
+        "ProjectionExpression":"access_count, expiration_time, short_url, url_value"
+  }
+  const command = new ScanCommand(commandInput);
+  try {
+    const results = await client.send(command);
+    return {arg: short_url, records: results.Items};
   } catch (err) {
     console.error(err);
     return err;
