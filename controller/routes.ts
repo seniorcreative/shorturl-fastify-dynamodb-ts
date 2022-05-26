@@ -1,6 +1,7 @@
-import { getItems, putItem } from '../adapter/datarepository';
+import { GetItemsData } from '../adapter/getitems';
+import { PutItemData } from '../adapter/putitem';
 
 export default [
-    {path: "/list", method: getItems },
-    {path: "/put", method: putItem, args: "http://www.google.com" }
+    { path: "/list", method: new GetItemsData().getData },
+    { path: "/put", method: new PutItemData().putData, args: "http://www.google.com" }
 ];
