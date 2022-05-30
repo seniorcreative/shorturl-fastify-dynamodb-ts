@@ -1,10 +1,11 @@
-export interface recordType {
+export interface ShortUrl {
+  short_url_key: string,
   url_value: string,
   access_count: number,
   short_url: string,
   expiration_time: number;
 }
 
-export interface records {
-  shorturl?: recordType[]
+export interface ShortUrls {
+  shorturl?: ShortUrl[] | undefined
 }
