@@ -1,9 +1,14 @@
-import { GetItemsData } from '../adapter/getitems';
-import { PutItemData } from '../adapter/putitem';
+import ShortUrlDynamoDbRepository from '../adapter/ShortUrlDynamoDbRepository';
+import { EXPIRY_TIME } from "../common/utils"
+
+const putData = {
+    "short_url_key": "3",
+    "url_value": 'https://www.duckduckgo.com',
+    "short_url": 'test123',
+    "access_count": 0,
+    "expiration_time": new Date().getTime() + EXPIRY_TIME
+}
 
 export default [
-    // TODO: Get rid of this
-    { path: "/list", method: new GetItemsData().getData },
-    // TODO: Move this into a new location, and write a test to check that the put class -> command receives the correct arguments
-    { path: "/put", method: new PutItemData().putData, args: "http://www.google.com" }
+    { path: "/put", method: new ShortUrlDynamoDbRepository().createOrUpdate(putData), args: "http://www.google.com" }
 ];
